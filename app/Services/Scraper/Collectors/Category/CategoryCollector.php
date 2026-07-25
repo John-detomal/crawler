@@ -3,7 +3,7 @@
 namespace App\Services\Scraper\Collectors\Category;
 
 use App\Services\Scraper\Collectors\CollectorInterface;
-use App\Services\scraper\extractor\DataExtractor;
+use App\Services\Scraper\Extractor\DataExtractor;
 use App\Services\Scraper\Extractor\HtmlExtractor;
 use App\Services\Scraper\Collectors\Collector;
 use App\Services\Scraper\Utilities\Utils;

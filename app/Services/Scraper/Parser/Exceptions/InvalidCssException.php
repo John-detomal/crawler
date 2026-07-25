@@ -5,7 +5,7 @@ namespace App\Services\Scraper\Parser\Exceptions;
 use Exception;
 use Throwable;
 
-class InvalidRegexException extends Exception
+class InvalidCssException extends Exception
 {
     public function __construct(
         string $message,

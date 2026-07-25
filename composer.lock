@@ -2373,16 +2373,16 @@
         },
         {
             "name": "johndetomal/browser-channel",
-            "version": "v1.2.0",
+            "version": "v1.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/John-detomal/BrowserDriverEngine.git",
-                "reference": "c602e28e2d9abe68941c5e84cfacf9432db69f13"
+                "reference": "30c1d50c25f93c972d621d1e7de902b3891c69ab"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/John-detomal/BrowserDriverEngine/zipball/c602e28e2d9abe68941c5e84cfacf9432db69f13",
-                "reference": "c602e28e2d9abe68941c5e84cfacf9432db69f13",
+                "url": "https://api.github.com/repos/John-detomal/BrowserDriverEngine/zipball/30c1d50c25f93c972d621d1e7de902b3891c69ab",
+                "reference": "30c1d50c25f93c972d621d1e7de902b3891c69ab",
                 "shasum": ""
             },
             "require": {
@@ -2413,9 +2413,9 @@
             "description": "PHP library for Browser-based scraping",
             "support": {
                 "issues": "https://github.com/John-detomal/BrowserDriverEngine/issues",
-                "source": "https://github.com/John-detomal/BrowserDriverEngine/tree/v1.2.0"
+                "source": "https://github.com/John-detomal/BrowserDriverEngine/tree/v1.3.0"
             },
-            "time": "2026-07-23T08:49:54+00:00"
+            "time": "2026-07-25T06:28:02+00:00"
         },
         {
             "name": "kelunik/certificate",

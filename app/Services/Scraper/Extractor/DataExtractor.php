@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\scraper\extractor;
+namespace App\Services\Scraper\Extractor;
 
 use App\Services\Scraper\Extractor\FieldExtractor;
 use App\Services\Scraper\Utilities\Utils;

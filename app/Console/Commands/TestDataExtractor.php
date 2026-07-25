@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Services\scraper\extractor\DataExtractor;
+use App\Services\Scraper\Extractor\DataExtractor;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Storage;
 
 #[Signature('app:test-data-extractor')]
 #[Description('Command description')]
-class TestFieldExtractor extends Command
+class TestDataExtractor extends Command
 {
     /**
      * Execute the console command.
