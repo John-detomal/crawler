@@ -15,4 +15,17 @@ class UrlSeenRegistry
     {
         $this->seen[hash('xxh3', $url)] = true;
     }
+
+    public function remember(string $url): bool
+    {
+        $hash = hash('xxh3', $url);
+
+        if (isset($this->seen[$hash])) {
+            return false;
+        }
+
+        $this->seen[$hash] = true;
+
+        return true;
+    }
 }

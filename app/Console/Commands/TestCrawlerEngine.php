@@ -11,6 +11,7 @@ use App\Services\Scraper\Crawler\CrawlerEngine;
 use Illuminate\Support\Facades\Storage;
 use App\Services\Scraper\Crawler\Dto\CrawlJobDto;
 use Illuminate\Support\Facades\Log;
+use Browser\Services\FileCache\CacheService;
 
 #[Signature('app:test-crawler-engine')]
 #[Description('Command description')]
@@ -24,27 +25,18 @@ class TestCrawlerEngine extends Command
         $json = Storage::get('config/ThPetterson.json');
         $config = json_decode($json, true);
 
-        $options = [
-            'settings' => [
-                'browser' => 'curl',
-                'debugging' => false,
-            ],
-            'cache_options' => [
-                'is_cache' => true,
-            ]
-        ];
-
-        $browser = new BrowserService($options);
-        $crawler = new CrawlerEngine($browser);
+        $crawler = app(CrawlerEngine::class);
 
         $result = $crawler
             ->seeds([
                 new CrawlJobDto(
-                    url: 'https://th-pettersson.com/en/artiklar/-6/index.html',
-                    name: 'Tires',
-                ),
+                    url: 'https://th-pettersson.com/en/artiklar/-6/-10/index.html',
+                    name: 'Home'
+                )
             ])
             ->maxPages(5)
+            ->limit(5)
+            ->subCategories()
             ->run($config)
             ->result();
 

@@ -9,7 +9,9 @@ use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 
 use Browser\Services\Browser\BrowserService;
-
+use Browser\Services\Browser\Middleware\Factory\PipelineFactory;
+use Browser\Services\Browser\Middleware\Registry\MiddlewareRegistry;
+use Browser\Services\Browser\Pipeline\BrowserPipeline;
 use Illuminate\Support\Facades\Storage;
 
 #[Signature('app:browser')]
@@ -22,9 +24,10 @@ class browser extends Command
     public function handle()
     {
 
+        echo "Start";
         $json = Storage::get('config/ThPetterson.json');
         $config = json_decode($json, true);
-        $baseUrl = $config['base_url'];
+        $baseUrl = $config['settings']['base_url'];
 
         $options = [
             'settings' => [
@@ -32,24 +35,40 @@ class browser extends Command
             ]
         ];
 
-        $browser = new BrowserService($options);
+        $proxies = [
+            [
+                'ip' => '192.168.1.10',
+                'port' => '1080',
+            ],
+            [
+                'ip' => '192.168.1.11',
+                'port' => '1080',
+            ],
+            [
+                'ip' => '192.168.1.12',
+                'port' => '1080',
+            ],
+        ];
 
-        // $html = $browser->openPage($baseUrl)['content'];
-        // $categories = CategoryCollector::collect($html, $config['category'], $baseUrl);
+        $factory = new PipelineFactory();
+        $pipeline = new BrowserPipeline(MiddlewareRegistry::register($factory));
+        $browser = new BrowserService($pipeline);
 
-        // $categoryResponse = $categories->where('category_name', 'TIRES')->values()->all();
+        $urls = [
 
-        $subCategoryResult = [];
-        // foreach ($categoryResponse as $category) {
-        $html = $browser->openPage('https://th-pettersson.com/en/artiklar/-6/index.html')['content'];
-        $result = SubCategoryCollector::collect($html, $config['sub_category'], $baseUrl);
+            "https://example.com",
 
-        $subCategoryResult = $result;
-        // }
+            // "https://httpbin.org/user-agent",
+            // "https://httpbin.org/redirect/3",
+            // "https://webscraper.io/test-sites/e-commerce/allinone",
+        ];
 
-        print_r($subCategoryResult);
-        // $blockResult = HtmlExtractor::extract($html, $category['category']);
 
-        // dd($blockResult);
+        foreach ($urls as $url) {
+            $browser->openPage($url);
+            $response = $browser->response()->html;
+
+            echo $response;
+        }
     }
 }

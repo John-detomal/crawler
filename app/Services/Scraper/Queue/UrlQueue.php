@@ -20,7 +20,11 @@ class UrlQueue implements UrlQueueInterface
         $this->queue->enqueue($job);
     }
 
-    public function pushMany(array $jobs): void
+    /**
+     * @param CrawlJobDto[] $jobs
+     */
+
+    public function pushMany(iterable $jobs): void
     {
         foreach ($jobs as $job) {
             $this->push($job);

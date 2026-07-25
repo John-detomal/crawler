@@ -9,7 +9,6 @@ use App\Services\Scraper\Extractor\PaginationExtractor;
 use App\Services\Scraper\Crawler\Dto\PaginationDto;
 use App\Services\Scraper\Collectors\Items\ItemsCollector;
 use RuntimeException;
-use Illuminate\Support\Facades\Storage;
 use App\Services\Scraper\Crawler\Crawler;
 
 class PaginationCrawler
@@ -23,7 +22,8 @@ class PaginationCrawler
     public function run(
         string $html,
         string $url,
-        array $config
+        array $config,
+
     ): PaginationDto {
 
         $paginationConfig = $config['pagination'];
@@ -59,11 +59,11 @@ class PaginationCrawler
             $url,
             $products,
             $foundIn,
+            1,
         );
 
         $page = 2;
         while (true) {
-            $page++;
 
             $config['pagination']['options']['fields']['offset']['value'] = $offset;
             $paginationUrl = PaginationExtractor::extract(
@@ -74,8 +74,8 @@ class PaginationCrawler
             $response = $this->browser
                 ->openPage("https://th-pettersson.com/?$paginationUrl");
 
-            $pageHtml = $response['content'];
-            $message = $response['message'];
+            $pageHtml = $response->response()->html;
+            $message = $response->response()->responseMessage;
 
             $offset += $step;
             $itemsCount += $this->processItemsFound(
@@ -84,11 +84,14 @@ class PaginationCrawler
                 $paginationUrl,
                 $products,
                 $foundIn,
+                $page,
             );
 
             if ($this->shouldStop($page, $totalPages, $itemsCount, $message)) {
                 break;
             }
+
+            $page++;
         }
 
         return new PaginationDto(
@@ -105,7 +108,6 @@ class PaginationCrawler
         string $html,
         array $config
     ): int {
-        Storage::put('html/base.html', $html);
         $parser = ParserType::from($config['type'])->parser();
 
         return (int)$parser->parse($html, $config['pattern'])->item(0)->text(1);
@@ -135,7 +137,8 @@ class PaginationCrawler
         array $config,
         string $url,
         array &$products,
-        array &$foundIn
+        array &$foundIn,
+        int $page
     ): int {
         $items = ItemsCollector::collect(
             $html,
@@ -147,7 +150,7 @@ class PaginationCrawler
             $products[] = $item;
 
             $foundIn[$item['sku']] = [
-                'page' => 1,
+                'page' => $page,
                 'url' => $url,
             ];
         }
@@ -159,7 +162,7 @@ class PaginationCrawler
         int $page,
         int $totalPages,
         int $itemsCount,
-        int $message
+        string $message
     ): bool {
         return ($this->pageLimit && $page >= $this->pageLimit)
             || $page >= $totalPages
