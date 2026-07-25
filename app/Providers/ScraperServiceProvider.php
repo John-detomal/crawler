@@ -10,7 +10,7 @@ use App\Services\Scraper\Crawler\Collection\ProductCollection;
 use App\Services\Scraper\Queue\UrlQueue;
 use App\Services\Scraper\Queue\UrlQueueInterface;
 
-use Inertia\ServiceProvider;
+use Illuminate\Support\ServiceProvider;
 use App\Services\Scraper\Crawler\Pipeline\CrawlerPipelineFactory;
 use App\Services\Scraper\Crawler\Pipeline\CrawlPipeline;
 use Browser\Services\Browser\BrowserService;
