@@ -3,7 +3,7 @@
 namespace App\Services\Scraper\Crawler;
 
 use App\Enums\Parser\ParserType;
-use Browser\Services\Browser\BrowserService;
+use App\Services\Fetch\FetchService;
 
 use App\Services\Scraper\Extractor\PaginationExtractor;
 use App\Services\Scraper\Crawler\Dto\PaginationDto;
@@ -16,15 +16,17 @@ class PaginationCrawler
     use Crawler;
 
     public function __construct(
-        private BrowserService $browser,
+        private FetchService $fetch,
     ) {}
 
     public function run(
-        string $html,
-        string $url,
-        array $config,
+        CrawlerContext $context,
 
     ): PaginationDto {
+
+        $config = $context->config['index_page'];
+        $url = $context->job->url;
+        $html = $context->html;
 
         $paginationConfig = $config['pagination'];
         $fields = $paginationConfig['options']['fields'];
@@ -71,8 +73,8 @@ class PaginationCrawler
                 $config['pagination']
             );
 
-            $response = $this->browser
-                ->openPage("https://th-pettersson.com/?$paginationUrl");
+            $response = $this->fetch
+                ->openPage("https://th-pettersson.com/?$paginationUrl", $context);
 
             $pageHtml = $response->response()->html;
             $message = $response->response()->responseMessage;

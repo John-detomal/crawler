@@ -23,9 +23,7 @@ class PaginationMiddleware implements CrawlerMiddleware
         $context->pagination = $this->crawler
             ->maxPages($context->pageLimit)
             ->run(
-                html: $context->html,
-                url: $context->job->url,
-                config: $context->config['index_page'],
+                $context
             );
 
         $this->categories->updatePagination(

@@ -40,4 +40,5 @@ class CrawlerContext
     public int $itemsLimit = 0;
 
     public bool $onlySubCategories = false;
+    public string $currentUrl = '';
 }

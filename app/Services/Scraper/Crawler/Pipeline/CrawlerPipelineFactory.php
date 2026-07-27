@@ -2,6 +2,7 @@
 
 namespace App\Services\Scraper\Crawler\Pipeline;
 
+use App\Services\Fetch\FetchService;
 use Illuminate\Contracts\Foundation\Application;
 
 use App\Services\Scraper\Crawler\Pipeline\Middleware\SeenMiddleware;
@@ -12,7 +13,6 @@ use App\Services\Scraper\Crawler\Pipeline\Middleware\ProductMiddleware;
 
 use App\Services\Scraper\Queue\UrlSeenRegistry;
 use App\Services\Scraper\Queue\UrlQueueInterface;
-use Browser\Services\Browser\BrowserService;
 
 use App\Services\Scraper\Crawler\Collection\CategoryCollection;
 use App\Services\Scraper\Crawler\Collection\ProductCollection;
@@ -26,13 +26,9 @@ class CrawlerPipelineFactory
         return new CrawlPipeline([
             new SeenMiddleware(new UrlSeenRegistry()),
             new CategoryMiddleware($app->make(CategoryCollection::class)),
-            new FetchMiddleware($app->make(BrowserService::class)),
+            new FetchMiddleware($app->make(FetchService::class)),
             new SubCategoryMiddleware($app->make(UrlQueueInterface::class)),
 
-            // new PaginationMiddleware(
-            //     $app->make(PaginationCrawler::class),
-            //     $app->make(CategoryCollection::class),
-            // ),
             new PaginationMiddleware(
                 $app->make(PaginationCrawler::class),
                 $app->make(CategoryCollection::class)

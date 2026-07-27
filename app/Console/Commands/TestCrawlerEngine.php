@@ -5,13 +5,11 @@ namespace App\Console\Commands;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
-use Browser\Services\Browser\BrowserService;
 use App\Services\Scraper\Crawler\CrawlerEngine;
 
 use Illuminate\Support\Facades\Storage;
 use App\Services\Scraper\Crawler\Dto\CrawlJobDto;
 use Illuminate\Support\Facades\Log;
-use Browser\Services\FileCache\CacheService;
 
 #[Signature('app:test-crawler-engine')]
 #[Description('Command description')]

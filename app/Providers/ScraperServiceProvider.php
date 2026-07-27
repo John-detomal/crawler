@@ -13,7 +13,8 @@ use App\Services\Scraper\Queue\UrlQueueInterface;
 use Illuminate\Support\ServiceProvider;
 use App\Services\Scraper\Crawler\Pipeline\CrawlerPipelineFactory;
 use App\Services\Scraper\Crawler\Pipeline\CrawlPipeline;
-use Browser\Services\Browser\BrowserService;
+use App\Services\Fetch\FetchService;
+
 use Browser\Services\Browser\Middleware\Factory\PipelineFactory;
 use Browser\Services\Browser\Middleware\Registry\MiddlewareRegistry;
 use Browser\Services\Browser\Pipeline\BrowserPipeline;
@@ -49,7 +50,7 @@ class ScraperServiceProvider extends ServiceProvider
 
     public function registerBrowser()
     {
-        $this->app->singleton(BrowserService::class, function () {
+        $this->app->singleton(FetchService::class, function () {
 
             $factory = new PipelineFactory();
 
@@ -57,7 +58,7 @@ class ScraperServiceProvider extends ServiceProvider
                 MiddlewareRegistry::register($factory)
             );
 
-            return new BrowserService($pipeline)->cache();
+            return new FetchService($pipeline);
         });
     }
 }
